@@ -45,5 +45,13 @@ What Cursor did:
 - Deleted `Assignment3_readme.txt.txt`.
 - Updated `MEMORY_BANK.md` to remove references to that deleted file.
 
+---
+
+Prompt #4 (Agent Mode):
+"make sure that all changes related to the project bulding in visual studio arent included in the git repo using git ignore"
+
+What Cursor did:
+- Added `.gitignore` to exclude Visual Studio/VS Build artifacts (e.g., `.vs/`, `x64/`, `Debug/`, `*.user`, `*.pdb`, etc.) from the repo.
+
 
 
