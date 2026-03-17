@@ -20,14 +20,13 @@ Keep it short and high-signal; update it when gameplay rules, file formats, or r
   - **Load + silent mode**: `-load -silent`
 
 ## Player controls & movement rules
-From `Assignment3_readme.txt.txt`:
 - **Movement**: `w`, `a`, `s`, `d`
   - After choosing a direction, **Mario continues automatically** in that direction.
   - Pressing `s` when there is **no ladder under Mario** causes Mario to **stay**.
 - **Hammer action**: `p` to hit with the hammer (when holding it).
 
 ## Gameplay invariants (do not break without explicit request)
-From `Assignment3_readme.txt.txt` + code behavior:
+From assignment requirements + code behavior:
 - **Hammer availability**:
   - Hammer exists as a single pickup on a board (loaded from `.screen`).
   - Hammer can be taken only once per stage run (tracked by `Board::isHammerTaken`).

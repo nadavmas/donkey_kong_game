@@ -36,5 +36,14 @@ What Cursor did:
 - Updated `Donkey_Kong_AN.vcxproj` and `.filters` to reference new file paths, added include directories, and added a post-build step to copy `assets/dkong_*.screen` into `$(OutDir)` (next to the exe).
 - Updated `MEMORY_BANK.md` to reflect the new structure and asset-copy behavior.
 
+---
+
+Prompt #3 (Agent Mode):
+"delete @Assignment3_readme.txt.txt , its not relevant anymore"
+
+What Cursor did:
+- Deleted `Assignment3_readme.txt.txt`.
+- Updated `MEMORY_BANK.md` to remove references to that deleted file.
+
 
 
