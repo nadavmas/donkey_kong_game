@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Donkey_Kong_AN", "Donkey_Kong_AN\Donkey_Kong_AN.vcxproj", "{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Debug|x64.ActiveCfg = Debug|x64
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Debug|x64.Build.0 = Debug|x64
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Debug|x86.ActiveCfg = Debug|Win32
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Debug|x86.Build.0 = Debug|Win32
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Release|x64.ActiveCfg = Release|x64
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Release|x64.Build.0 = Release|x64
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Release|x86.ActiveCfg = Release|Win32
+		{2D77EAE5-87DB-4E3C-81BD-D3A98DC6C4E4}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2935C9E7-20BA-4567-8656-64E53DD2C8B2}
+	EndGlobalSection
+EndGlobal
