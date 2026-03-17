@@ -1,0 +1,19 @@
+---
+description: Project context and invariants for donkey_kong_game
+alwaysApply: true
+---
+
+You are working in the `donkey_kong_game` repository (C++ console Donkey Kong game).
+
+Before making gameplay-affecting changes, read `MEMORY_BANK.md` and treat it as the source of truth for:
+- Controls and auto-movement behavior
+- Hammer and extra-life invariants
+- `.screen` tile legend / parsing expectations
+- How stage files are discovered (working directory rules)
+
+Golden rules:
+- Do not change controls (`w/a/s/d`, `p`) or the “auto-continue after direction” behavior unless explicitly asked.
+- Do not break ladder behavior (notably: pressing `s` with no ladder under Mario causes stay).
+- Preserve: hammer can only be picked once per stage run; extra life is defined by `.screen` (not hardcoded).
+- If you change `.screen` parsing or the tile legend, update `MEMORY_BANK.md` in the same change.
+

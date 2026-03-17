@@ -1,0 +1,19 @@
+---
+description: Lightweight safety checks for edits
+alwaysApply: true
+---
+
+Keep changes safe and reviewable:
+- Prefer small, localized diffs over broad refactors.
+- Preserve existing file discovery behavior unless explicitly requested (stage files are discovered from the current working directory).
+- Avoid changing gameplay timing/logic “to clean up” unless there is a user-visible bug or requirement.
+
+When editing:
+- If touching `Board::load`, `.screen` parsing, or board symbols, update `MEMORY_BANK.md` accordingly.
+- If touching controls, movement rules, jumping/falling rules, hammer, or extra-life behavior, update `MEMORY_BANK.md` accordingly.
+
+Verification checklist (quick):
+- Game still builds in Visual Studio.
+- At least one `dkong*.screen` loads when the working directory contains stage files.
+- Basic inputs still work: `w/a/s/d` movement, `p` hammer use.
+
