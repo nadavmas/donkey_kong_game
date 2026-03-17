@@ -1,6 +1,5 @@
 #include "GameSimple.h"
 
-
 // The Game class manages the entire game flow, including menus, gameplay, and state transitions.
 // It initializes the game, tracks the current state, and handles player interactions with the game logic.
 // Load screen files from the default directory

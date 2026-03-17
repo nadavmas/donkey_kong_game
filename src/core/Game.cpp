@@ -10,14 +10,34 @@
 // Load screen files from the default directory
 void Game::getAllBoardFileNames(std::vector<std::string>& vec_to_fill) const {
 	namespace fs = std::filesystem;
-	for (const auto& entry : fs::directory_iterator(fs::current_path())) {
-		auto filename = entry.path().filename();
-		auto filenameStr = filename.string();
-		if (filenameStr.substr(0, 5) == "dkong" && filename.extension() == ".screen") {
-			
-			vec_to_fill.push_back(filenameStr);
+	auto scanDir = [&](const fs::path& dir) {
+		int found = 0;
+		if (!fs::exists(dir) || !fs::is_directory(dir)) {
+			return 0;
 		}
-	}
+		for (const auto& entry : fs::directory_iterator(dir)) {
+			auto filename = entry.path().filename();
+			auto filenameStr = filename.string();
+			if (filenameStr.size() >= 5 && filenameStr.substr(0, 5) == "dkong" && filename.extension() == ".screen") {
+				vec_to_fill.push_back((dir / filename).string());
+				found++;
+			}
+		}
+		return found;
+	};
+
+	// 1) Working directory (original behavior)
+	const fs::path cwd = fs::current_path();
+	if (scanDir(cwd) > 0) return;
+
+	// 2) Common repo layout fallback: ../assets and ../../assets from project folder
+	// This keeps the game runnable even if Visual Studio working directory is the project dir.
+	const fs::path assets1 = cwd / "assets";
+	if (scanDir(assets1) > 0) return;
+	const fs::path assets2 = cwd.parent_path() / "assets";
+	if (scanDir(assets2) > 0) return;
+	const fs::path assets3 = cwd.parent_path().parent_path() / "assets";
+	(void)scanDir(assets3);
 }
 void Game::getAllStepsFileNames(std::vector<std::string>& vec_to_fill) const {
 	namespace fs = std::filesystem;

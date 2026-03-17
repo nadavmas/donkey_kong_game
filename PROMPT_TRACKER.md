@@ -53,5 +53,13 @@ Prompt #4 (Agent Mode):
 What Cursor did:
 - Added `.gitignore` to exclude Visual Studio/VS Build artifacts (e.g., `.vs/`, `x64/`, `Debug/`, `*.user`, `*.pdb`, etc.) from the repo.
 
+---
 
+Prompt #5 (Debug Mode):
+"theres a problem choosing difficulty when starting the game"
 
+What Cursor did:
+- Added temporary debug instrumentation to the menu and game flow to capture runtime behavior when selecting difficulty.
+- Fixed stage discovery so `dkong_*.screen` files are found under `assets/` even when the working directory is different, and set the Visual Studio debugger working directory to `$(OutDir)`.
+- Updated the level selection screen to show "Level 1", "Level 2", "Level 3" instead of full file paths.
+- After verifying the fix, removed the debug instrumentation and its log file.

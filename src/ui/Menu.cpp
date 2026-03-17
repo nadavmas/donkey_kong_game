@@ -170,7 +170,7 @@ int Menu::gameFlow(const vector<string>& files) {
 	// Loop through the vector to display each stage
 	for (const string& num : files) {
 		gotoxy(27, 8 + counter);
-		cout << " " << counter << ". " << num;
+		cout << " " << counter << ". Level " << counter;
 		counter++;
 	}
 
