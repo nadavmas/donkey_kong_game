@@ -13,13 +13,28 @@ What Cursor did:
 ---
 
 Prompt #1 (Agent Mode):
-"Add PROMPT_TRACKER logging rule
+"i want you to add a rule - i want that every agent\plan prompt that changes files in any way will be documented in a new \"PROMPT_TRACKER\" readme file. 
+i want every prompt to be documented by the following template:
+Prompt #(whatever this prompt's number is)(Plan Mode/Agent Mode):
+\"the whole prompt\"
 
-Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
-
-To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos."
+then explain what cursor did"
 
 What Cursor did:
 - Added `PROMPT_TRACKER.md` with the required logging template and first entry for this change-making prompt.
 - Added a new Cursor rule at `.cursor/rules/prompt-tracker.mdc` to require appending a new entry whenever a USER prompt results in file changes (USER prompts only).
+
+---
+
+Prompt #2 (Agent Mode):
+"Instead of having all of the files in code files, i want you to rearrange the files to folders in a more logical way that will help the repo being cleaner"
+
+What Cursor did:
+- Created a clean folder structure: `src/` (with `core/world/objects/ui/logic/utils`), `include/` (mirroring those areas), `assets/`, and `Donkey_Kong_AN/`.
+- Moved source files out of `Code Files/` into the new folders; moved `.screen/.steps/.result` files into `assets/`.
+- Moved Visual Studio project files into `Donkey_Kong_AN/` and solution to repo root.
+- Updated `Donkey_Kong_AN.vcxproj` and `.filters` to reference new file paths, added include directories, and added a post-build step to copy `assets/dkong_*.screen` into `$(OutDir)` (next to the exe).
+- Updated `MEMORY_BANK.md` to reflect the new structure and asset-copy behavior.
+
+
 

@@ -19,45 +19,45 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Barrel.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="DonkeyKong.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameLoad.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameSave.h" />
-    <ClInclude Include="GameSilent.h" />
-    <ClInclude Include="GameSimple.h" />
-    <ClInclude Include="Ghost.h" />
-    <ClInclude Include="Helpers.h" />
-    <ClInclude Include="location.h" />
-    <ClInclude Include="Mario.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="Princess.h" />
-    <ClInclude Include="RegGhost.h" />
-    <ClInclude Include="Results.h" />
-    <ClInclude Include="Steps.h" />
-    <ClInclude Include="SupGhost.h" />
-    <ClInclude Include="Verifications.h" />
+    <ClInclude Include="..\include\objects\Barrel.h" />
+    <ClInclude Include="..\include\world\Board.h" />
+    <ClInclude Include="..\include\objects\DonkeyKong.h" />
+    <ClInclude Include="..\include\core\Game.h" />
+    <ClInclude Include="..\include\core\GameLoad.h" />
+    <ClInclude Include="..\include\objects\GameObject.h" />
+    <ClInclude Include="..\include\core\GameSave.h" />
+    <ClInclude Include="..\include\core\GameSilent.h" />
+    <ClInclude Include="..\include\core\GameSimple.h" />
+    <ClInclude Include="..\include\objects\Ghost.h" />
+    <ClInclude Include="..\include\utils\Helpers.h" />
+    <ClInclude Include="..\include\world\location.h" />
+    <ClInclude Include="..\include\objects\Mario.h" />
+    <ClInclude Include="..\include\ui\Menu.h" />
+    <ClInclude Include="..\include\objects\Princess.h" />
+    <ClInclude Include="..\include\objects\RegGhost.h" />
+    <ClInclude Include="..\include\ui\Results.h" />
+    <ClInclude Include="..\include\logic\Steps.h" />
+    <ClInclude Include="..\include\objects\SupGhost.h" />
+    <ClInclude Include="..\include\logic\Verifications.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Barrel.cpp" />
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameLoad.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameSave.cpp" />
-    <ClCompile Include="GameSilent.cpp" />
-    <ClCompile Include="GameSimple.cpp" />
-    <ClCompile Include="Helpers.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Mario.cpp" />
-    <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="RegGhost.cpp" />
-    <ClCompile Include="Results.cpp" />
-    <ClCompile Include="Steps.cpp" />
-    <ClCompile Include="SupGhost.cpp" />
-    <ClCompile Include="Verifications.cpp" />
+    <ClCompile Include="..\src\objects\Barrel.cpp" />
+    <ClCompile Include="..\src\world\Board.cpp" />
+    <ClCompile Include="..\src\core\Game.cpp" />
+    <ClCompile Include="..\src\core\GameLoad.cpp" />
+    <ClCompile Include="..\src\objects\GameObject.cpp" />
+    <ClCompile Include="..\src\core\GameSave.cpp" />
+    <ClCompile Include="..\src\core\GameSilent.cpp" />
+    <ClCompile Include="..\src\core\GameSimple.cpp" />
+    <ClCompile Include="..\src\utils\Helpers.cpp" />
+    <ClCompile Include="..\src\core\Main.cpp" />
+    <ClCompile Include="..\src\objects\Mario.cpp" />
+    <ClCompile Include="..\src\ui\Menu.cpp" />
+    <ClCompile Include="..\src\objects\RegGhost.cpp" />
+    <ClCompile Include="..\src\ui\Results.cpp" />
+    <ClCompile Include="..\src\logic\Steps.cpp" />
+    <ClCompile Include="..\src\objects\SupGhost.cpp" />
+    <ClCompile Include="..\src\logic\Verifications.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -117,11 +117,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\include;..\include\core;..\include\world;..\include\objects;..\include\ui;..\include\logic;..\include\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)..\assets\dkong_*.screen" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -131,6 +135,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\include;..\include\core;..\include\world;..\include\objects;..\include\ui;..\include\logic;..\include\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,6 +143,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)..\assets\dkong_*.screen" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -146,11 +154,15 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>..\include;..\include\core;..\include\world;..\include\objects;..\include\ui;..\include\logic;..\include\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)..\assets\dkong_*.screen" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -160,6 +172,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\include;..\include\core;..\include\world;..\include\objects;..\include\ui;..\include\logic;..\include\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,6 +180,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)..\assets\dkong_*.screen" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

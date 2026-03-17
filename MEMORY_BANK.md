@@ -6,14 +6,14 @@ Keep it short and high-signal; update it when gameplay rules, file formats, or r
 ## Project summary
 - **Project type**: C++ console game (Visual Studio solution).
 - **Primary goal**: A Donkey Kong–style platform game with stages loaded from `.screen` files.
-- **Entry point**: `Code Files/Main.cpp` (calls `Game::run(mode)`).
+- **Entry point**: `src/core/Main.cpp` (calls `Game::run(mode)`).
 
 ## How to run
-- **Build/Run (recommended)**: open `Code Files/Donkey_Kong_AN.sln` in Visual Studio and run the startup project.
+- **Build/Run (recommended)**: open `Donkey_Kong_AN.sln` in Visual Studio and run the startup project.
 - **Runtime working directory matters**:
-  - The game discovers stage/steps/results files by scanning `std::filesystem::current_path()` for files named `dkong*.screen`, `dkong*.steps`, `dkong*.result` (see `Code Files/Game.cpp`).
-  - Ensure the **working directory** contains those files (or set VS “Debugging → Working Directory” accordingly).
-- **Command-line modes** (see `Code Files/Main.cpp`):
+  - The game discovers stage/steps/results files by scanning `std::filesystem::current_path()` for files named `dkong*.screen`, `dkong*.steps`, `dkong*.result` (see `src/core/Game.cpp`).
+  - This repo keeps stage files under `assets/`, and the Visual Studio project is configured to **copy `assets/dkong_*.screen` next to the built executable** after build (post-build step), so running from VS should find them in `$(OutDir)`.
+- **Command-line modes** (see `src/core/Main.cpp`):
   - **Default**: no args → normal interactive run
   - **Save mode**: `-save`
   - **Load mode**: `-load`
@@ -37,14 +37,14 @@ From `Assignment3_readme.txt.txt` + code behavior:
   - When collected once, it is removed from view for that stage run.
 
 ## Stage file discovery and locations
-- **On disk in this repo**: `.screen` files currently live under `Code Files/`:
-  - `Code Files/dkong_01.screen`
-  - `Code Files/dkong_02.screen`
-  - `Code Files/dkong_03.screen`
-- **At runtime**: the game loads by scanning the **current working directory** for `dkong*.screen` and related files (see `Code Files/Game.cpp`).
+- **On disk in this repo**: stage files live under `assets/`:
+  - `assets/dkong_01.screen`
+  - `assets/dkong_02.screen`
+  - `assets/dkong_03.screen`
+- **At runtime**: the game loads by scanning the **current working directory** for `dkong*.screen` and related files (see `src/core/Game.cpp`).
 
 ## `.screen` board markers (file format hints)
-Loaded in `Code Files/Board.cpp` (`Board::load`):
+Loaded in `src/world/Board.cpp` (`Board::load`):
 - **`@`**: Mario start
 - **`&`**: Donkey Kong start
 - **`$`**: Princess position
@@ -53,18 +53,18 @@ Loaded in `Code Files/Board.cpp` (`Board::load`):
 - **`p`**: hammer pickup position
 - **Extra life**: represented visually as `"<3"`; loader keys off the `'3'` character and confirms the previous char is `'<'`
 
-Other notable tiles referenced in movement/collision code (`Code Files/Verifications.cpp`, `Code Files/Mario.cpp`):
+Other notable tiles referenced in movement/collision code (`src/logic/Verifications.cpp`, `src/objects/Mario.cpp`):
 - **`H`**: ladder
 - **`Q`**: walls/solid blocks
 - **`=`**: platform/floor
 - **`<` / `>`**: ramp indicators used by barrel movement
 
 ## Key code landmarks
-- **File discovery**: `Code Files/Game.cpp` (`getAllBoardFileNames`, `getAllStepsFileNames`, `getAllResultFileNames`)
-- **Board parsing**: `Code Files/Board.cpp` (`Board::load`)
-- **Collision/movement checks**: `Code Files/Verifications.cpp`
-- **Mario movement/jump/hammer**: `Code Files/Mario.cpp` and `Code Files/Mario.h`
-- **Mode routing**: `Code Files/Main.cpp`
+- **File discovery**: `src/core/Game.cpp` (`getAllBoardFileNames`, `getAllStepsFileNames`, `getAllResultFileNames`)
+- **Board parsing**: `src/world/Board.cpp` (`Board::load`)
+- **Collision/movement checks**: `src/logic/Verifications.cpp`
+- **Mario movement/jump/hammer**: `src/objects/Mario.cpp` and `include/objects/Mario.h`
+- **Mode routing**: `src/core/Main.cpp`
 
 ## When to update this memory bank
 Update `MEMORY_BANK.md` when you change:

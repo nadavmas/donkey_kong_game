@@ -6,18 +6,21 @@ alwaysApply: true
 If (and only if) a USER prompt results in any file changes, you must append a new entry to `PROMPT_TRACKER.md` at the repo root.
 
 Scope:
-- Log **USER prompts only** (do not log assistant text).
+- Log **only the prompts the user wrote** (verbatim USER message text).
+- Do **not** log any assistant text (plans, explanations, tool output, summaries).
+- Do **not** paraphrase or rewrite the prompt.
 - Do not log prompts that resulted in **no** file changes.
 
 Numbering:
 - Use `Prompt #N` where `N` is 1 + the last logged prompt number in `PROMPT_TRACKER.md`.
 
 Mode label:
-- Use the mode in which the USER prompt was issued: `(Plan Mode)` or `(Agent Mode)`.
+- Use the mode in which the USER prompt was issued: `(Plan Mode)`, `(Agent Mode)`, or `(Debug Mode)`.
+- For **Debug Mode**: append the entry once debugging is complete and the fix(es) have been applied (so the tracker reflects the final set of file changes).
 
 Required template (exactly this shape):
 
-Prompt #N (Plan Mode/Agent Mode):
+Prompt #N (Plan Mode/Agent Mode/Debug Mode):
 "<the whole USER prompt>"
 
 What Cursor did:
