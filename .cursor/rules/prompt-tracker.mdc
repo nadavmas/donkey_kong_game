@@ -10,6 +10,7 @@ Scope:
 - Do **not** log any assistant text (plans, explanations, tool output, summaries).
 - Do **not** paraphrase or rewrite the prompt.
 - Do not log prompts that resulted in **no** file changes.
+- Never log Plan/Agent Mode follow-up confirmations/execution requests such as `go ahead` or prompts that start with `Implement the plan as specified`.
 
 Numbering:
 - Use `Prompt #N` where `N` is 1 + the last logged prompt number in `PROMPT_TRACKER.md`.
@@ -17,6 +18,7 @@ Numbering:
 Mode label:
 - Use the mode in which the USER prompt was issued: `(Plan Mode)`, `(Agent Mode)`, or `(Debug Mode)`.
 - For **Debug Mode**: append the entry once debugging is complete and the fix(es) have been applied (so the tracker reflects the final set of file changes).
+- For **Plan Mode**: log ONLY the initial USER prompt that started/created the plan. Do NOT log later Plan Mode user replies that are just responses to assistant questions (example: `go ahead`).
 
 Required template (exactly this shape):
 

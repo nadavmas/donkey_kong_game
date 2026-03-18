@@ -1,8 +1,61 @@
 #include "GameSimple.h"
+#include "GameEngine.h"
 
 // The Game class manages the entire game flow, including menus, gameplay, and state transitions.
 // It initializes the game, tracks the current state, and handles player interactions with the game logic.
 // Load screen files from the default directory
+
+// Simple keyboard-driven, rendering-enabled mode.
+struct SimpleModeHooks : public GameModeHooks {
+    bool usesKeyboard() const override
+    {
+        return true;
+    }
+
+    void onStageStart(int /*difficulty*/,
+                      Steps& /*steps*/,
+                      Results& /*results*/) override
+    {
+        // No-op for simple mode.
+    }
+
+    char getNextInput(const Steps& /*steps*/,
+                      size_t /*iterationCount*/,
+                      char currentInput) override
+    {
+        // For simple mode we rely on the engine's current input,
+        // which is already updated from keyboard.
+        return currentInput;
+    }
+
+    void onStepRecorded(int /*iterationCount*/,
+                        char /*input*/,
+                        Steps& /*steps*/) override
+    {
+        // No recording in simple mode.
+    }
+
+    void onResultRecorded(int /*iterationCount*/,
+                          Results::ResultValue /*result*/,
+                          Results& /*results*/) override
+    {
+        // No results file in simple mode.
+    }
+
+    bool shouldRender() const override
+    {
+        return true;
+    }
+
+    void renderFrame(Board& /*board*/,
+                     Mario& /*mario*/,
+                     DonkeyKong& /*dk*/,
+                     Princess& /*pr*/) override
+    {
+        // The engine already prints using Board/Mario/DK drawing functions.
+        // No additional rendering is required here.
+    }
+};
 
 
 void GameSimple::run(int mode)
@@ -41,11 +94,13 @@ void GameSimple::run(int mode)
 	while (is_running == true)
 	{
 
-		if (choice == 1)
-		{
-			playVal = Play(DL, board, score); // Start the game with the selected difficulty
-
-		}
+        if (choice == 1)
+        {
+            // Use the shared GameEngine for the core gameplay loop.
+            SimpleModeHooks hooks;
+            GameEngine engine;
+            playVal = engine.runStage(DL, board, score, hooks);
+        }
 		else
 			is_running = false; // Exit the game if the user chooses "Exit"
 		board.resetLocations();

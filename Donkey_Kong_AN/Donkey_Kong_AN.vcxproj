@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\core\GameEngine.h" />
     <ClInclude Include="..\include\objects\Barrel.h" />
     <ClInclude Include="..\include\world\Board.h" />
     <ClInclude Include="..\include\objects\DonkeyKong.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="..\src\objects\Barrel.cpp" />
     <ClCompile Include="..\src\world\Board.cpp" />
     <ClCompile Include="..\src\core\Game.cpp" />
+    <ClCompile Include="..\src\core\GameEngine.cpp" />
     <ClCompile Include="..\src\core\GameLoad.cpp" />
     <ClCompile Include="..\src\objects\GameObject.cpp" />
     <ClCompile Include="..\src\core\GameSave.cpp" />

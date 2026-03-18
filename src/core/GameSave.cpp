@@ -1,4 +1,56 @@
 #include "GameSave.h"
+#include "GameEngine.h"
+
+#include <chrono>
+#include <fstream>
+#include <string>
+
+static std::string jsonEscape(const std::string& in) {
+	std::string out;
+	out.reserve(in.size());
+	for (char c : in) {
+		if (c == '\\') out += "\\\\";
+		else if (c == '"') out += "\\\"";
+		else if (c == '\n') out += "\\n";
+		else if (c == '\r') out += "\\r";
+		else out += c;
+	}
+	return out;
+}
+
+struct SaveModeHooks : public GameModeHooks {
+	std::string& resultsFile;
+	std::string& stepsFile;
+
+	explicit SaveModeHooks(std::string& rf, std::string& sf) : resultsFile(rf), stepsFile(sf) {}
+
+	bool usesKeyboard() const override { return true; }
+
+	void onStageStart(int difficulty, Steps& steps, Results& /*results*/) override {
+		steps.setDifficulty(difficulty);
+		// Random seed will be set by the engine if not set already.
+	}
+
+	char getNextInput(const Steps& /*steps*/, size_t /*iterationCount*/, char currentInput) override {
+		return currentInput;
+	}
+
+	void onStepRecorded(int iterationCount, char input, Steps& steps) override {
+		steps.addStep(iterationCount, input);
+		steps.saveSteps(stepsFile);
+	}
+
+	void onResultRecorded(int iterationCount, Results::ResultValue result, Results& results) override {
+		results.addResult(iterationCount, result);
+		results.saveResults(resultsFile);
+	}
+
+	bool shouldRender() const override { return true; }
+
+	void renderFrame(Board& /*board*/, Mario& /*mario*/, DonkeyKong& /*dk*/, Princess& /*pr*/) override {
+		// Rendering is handled by the engine's existing draw calls.
+	}
+};
 
 void GameSave::run(int mode) {
 	int choice = 1; // Default choice to start the game
@@ -17,6 +69,22 @@ void GameSave::run(int mode) {
 		boardChoice = m.gameFlow(names);
 		system("cls");
 		counter = boardChoice;// Variables for tracking game state and difficulty level 
+		// #region debug_save_index_oob
+		{
+			const size_t idx = (counter > 0) ? static_cast<size_t>(counter - 1) : 0;
+			const auto ts = std::chrono::duration_cast<std::chrono::milliseconds>(
+				std::chrono::system_clock::now().time_since_epoch()).count();
+			std::ofstream f("C:\\Projects\\donkey_kong_game\\debug-15106d.log", std::ios::app);
+			if (f.is_open()) {
+				f << "{\"sessionId\":\"15106d\",\"runId\":\"pre-fix\",\"hypothesisId\":\"H_save_index_oob\",\"location\":\"GameSave.cpp:run:beforeResultsStepsIndex\",\"message\":\"beforeIndex\",\"data\":{\"counter\":" << counter
+				  << ",\"idx\":" << idx
+				  << ",\"namesSize\":" << names.size()
+				  << ",\"resultsFilesSize\":" << resultsfiles.size()
+				  << ",\"stepsFilesSize\":" << stepsfiles.size()
+				  << "},\"timestamp\":" << ts << "}\n";
+			}
+		}
+		// #endregion
 		results_file = resultsfiles[counter - 1];
 		steps_file = stepsfiles[counter - 1];
 		error = 0;
@@ -42,7 +110,9 @@ void GameSave::run(int mode) {
 
 		if (choice == 1)
 		{
-			playVal = Play(DL, board, score,results_file,steps_file); // Start the game with the selected difficulty
+			SaveModeHooks hooks(results_file, steps_file);
+			GameEngine engine;
+			playVal = engine.runStage(DL, board, score, hooks, &results_file, &steps_file);
 		}
 		else
 			is_running = false; // Exit the game if the user chooses "Exit"

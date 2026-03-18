@@ -1,4 +1,44 @@
 #include "GameLoad.h"
+#include "GameEngine.h"
+
+struct LoadModeHooks : public GameModeHooks {
+	std::string& resultsFile;
+	std::string& stepsFile;
+	std::pair<size_t, Results::ResultValue> currResult{ 0, Results::noResult };
+
+	explicit LoadModeHooks(std::string& rf, std::string& sf) : resultsFile(rf), stepsFile(sf) {}
+
+	bool usesKeyboard() const override { return false; }
+
+	void onStageStart(int /*difficulty*/, Steps& steps, Results& results) override {
+		steps = Steps::loadSteps(stepsFile);
+		results = Results::loadResults(resultsFile);
+		currResult = results.popResult();
+	}
+
+	char getNextInput(const Steps& steps, size_t iterationCount, char currentInput) override {
+		if (!steps.getSteps().empty() && steps.isNextStepOnIteration(iterationCount)) {
+			return const_cast<Steps&>(steps).popStep();
+		}
+		return currentInput;
+	}
+
+	void onStepRecorded(int /*iterationCount*/, char /*input*/, Steps& /*steps*/) override {
+		// No recording in load mode.
+	}
+
+	void onResultRecorded(int iterationCount, Results::ResultValue result, Results& results) override {
+		if (currResult.second == Results::noResult) return;
+		if (currResult.first == (size_t)iterationCount && currResult.second == result) {
+			currResult = results.popResult();
+			return;
+		}
+		results.reportResultError("Result iteration mismatch", resultsFile, iterationCount, currResult.first);
+	}
+
+	bool shouldRender() const override { return true; }
+	void renderFrame(Board& /*board*/, Mario& /*mario*/, DonkeyKong& /*dk*/, Princess& /*pr*/) override {}
+};
 
 void GameLoad::run(int mode) {
 	int score = 0;
@@ -44,7 +84,9 @@ void GameLoad::run(int mode) {
 
 		if (choice == 1)
 		{
-			playVal = Play(DL, board, score, results_file, steps_file); // Start the game with the selected difficulty
+			LoadModeHooks hooks(results_file, steps_file);
+			GameEngine engine;
+			playVal = engine.runStage(DL, board, score, hooks, &results_file, &steps_file);
 
 		}
 		else

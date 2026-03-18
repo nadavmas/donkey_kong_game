@@ -4,8 +4,8 @@ This file logs **USER prompts that resulted in file changes**.
 
 Template per entry:
 
-Prompt #N (Plan Mode/Agent Mode):
-"the whole prompt"
+Prompt #N (Plan Mode/Agent Mode/Debug Mode):
+"<the whole USER prompt>"
 
 What Cursor did:
 - <brief explanation of file changes>
@@ -63,3 +63,31 @@ What Cursor did:
 - Fixed stage discovery so `dkong_*.screen` files are found under `assets/` even when the working directory is different, and set the Visual Studio debugger working directory to `$(OutDir)`.
 - Updated the level selection screen to show "Level 1", "Level 2", "Level 3" instead of full file paths.
 - After verifying the fix, removed the debug instrumentation and its log file.
+
+---
+
+Prompt #7 (Plan Mode):
+"I want to seperate the game engine from the game mode. propose the best 2 options to do so.  (this is the kind of prompts that i want to be logged into @PROMPT_TRACKER.md )"
+
+What Cursor did:
+- Proposed a refactor separation strategy by introducing a core `GameEngine` plus a mode strategy/callback interface (`GameModeHooks`), with each mode acting as a thin wrapper supplying input/recording/rendering behavior.
+- Added the engine/mode separation implementation in `src/core/GameEngine.cpp` + corresponding hooks interface (and wired `GameSimple` to run a shared `runStage` loop via hooks).
+- After separation, fixed stage discovery/difficulty selection by setting VS debugger working directory to `$(OutDir)`, adding `assets/` fallback scanning for `.screen` discovery, and updating the UI to show “Level 1/Level 2/Level 3”.
+- After separation, fixed the “stuck in the air” player movement regression by restoring the keyboard-driven control flow inside the shared engine loop (including the inner `_kbhit()` wait loop and `clearInputBuffer()` timing / jump-fall reset logic).
+- After separation, fixed Save-mode crash (`vector subscript out of range`) by ensuring save/load discovery uses the same robust `assets/` fallback scanning and adding NDJSON instrumentation for the out-of-range/indexing hypothesis.
+- After separation, diagnosed the Load-mode infinite fast loop and Silent-mode failure by instrumenting the step-based loop control flow (NDJSON logs like `debug_stepBased_init`, `debug_stepBased_it_update`, `debug_stepBased_after_inner_no_sleep`) to confirm when the inner loop stops executing without outer-loop termination.
+
+---
+
+Prompt #8 (Plan Mode):
+"I want you to create seperation between the game engine and the game modes using the first option you've offered: "Create one core GameEngine class that knows how to run a stage (the loop with Mario, barrels, ghosts, collisions, difficulty, etc.), and let each mode (GameSimple, GameSave, GameLoad, GameSilent) pass in a small strategy object or set of callbacks that decide how input/recording/rendering work.""
+
+What Cursor did:
+- Implemented the “one core `GameEngine` + strategy/callback hooks” approach by creating `GameEngine::runStage` as the shared gameplay loop and defining a `GameModeHooks`-style interface for mode-specific behavior (input source, whether to render, and step/result recording/checking).
+- Wired `GameSimple` to call the engine’s shared stage loop through hooks, establishing the new engine/mode separation structure.
+- After separation, fixed stage discovery/difficulty selection by using `$(OutDir)` as the debugger working directory, adding `assets/` fallback scanning for `.screen` discovery, and displaying “Level 1/Level 2/Level 3” instead of raw paths.
+- After separation, fixed the “stuck in the air” movement regression by aligning the keyboard-mode loop behavior to the original `GameSimple::Play` control flow (inner `_kbhit()` wait loop, `clearInputBuffer()` placement/timing, and jump/fall reset logic).
+- After separation, fixed Save-mode `vector subscript out of range` by making step/result file discovery robust (including `assets/` fallback scanning) and adding NDJSON logs to validate indexing assumptions.
+- After separation, diagnosed the Load-mode infinite fast loop and Silent-mode not working by instrumenting the step-based loop (NDJSON logs like `debug_stepBased_init`, `debug_stepBased_it_update`, `debug_stepBased_after_inner_no_sleep`) to pinpoint loop termination behavior when steps become empty.
+
+---

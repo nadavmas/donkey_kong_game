@@ -53,6 +53,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\core\GameEngine.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\objects\Barrel.h">
       <Filter>Header Files\objects</Filter>
     </ClInclude>
@@ -117,6 +120,9 @@
   <ItemGroup>
     <ClCompile Include="..\src\objects\Barrel.cpp">
       <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\GameEngine.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\world\Board.cpp">
       <Filter>Source Files\world</Filter>
