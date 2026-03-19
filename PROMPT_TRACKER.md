@@ -91,3 +91,12 @@ What Cursor did:
 - After separation, diagnosed the Load-mode infinite fast loop and Silent-mode not working by instrumenting the step-based loop (NDJSON logs like `debug_stepBased_init`, `debug_stepBased_it_update`, `debug_stepBased_after_inner_no_sleep`) to pinpoint loop termination behavior when steps become empty.
 
 ---
+
+Prompt #9 (Plan Mode):
+"I want you to create a readme for the project explaining the architechture, the structure, cursor rules and memory bank."
+
+What Cursor did:
+- Added `README.md` documenting the project architecture/structure plus links to `MEMORY_BANK.md` and the `.cursor/rules/*` guidance.
+
+
+
