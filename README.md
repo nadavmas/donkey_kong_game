@@ -23,14 +23,14 @@ The game is split into a small “game runner” layer and the core stage loop:
 
 ```mermaid
 flowchart TD
-  Main[Main (src/core/Main.cpp)] --> Game[Game dispatch (src/core/Game.cpp)]
-  Game --> Modes[Mode classes (GameSimple/GameSave/GameLoad/GameSilent)]
-  Modes --> Engine[GameEngine::runStage (src/core/GameEngine.cpp)]
-  Engine --> Board[Board (src/world/Board.cpp)]
-  Engine --> Logic[Verifications (src/logic/Verifications.cpp)]
-  Engine --> Entities[Mario/DK/Princess/Barrels/Ghosts]
-  Save[SaveModeHooks] -->|record| StepsResults[Steps/Results files]
-  Load[LoadModeHooks] -->|replay/check| StepsResults
+  Main[Main src/core/Main.cpp] --> Game[Game dispatch src/core/Game.cpp]
+  Game --> Modes[Mode classes GameSimple/GameSave/GameLoad/GameSilent]
+  Modes --> Engine[GameEngine::runStage src/core/GameEngine.cpp]
+  Engine --> Board[Board src/world/Board.cpp]
+  Engine --> Logic[Verifications src/logic/Verifications.cpp]
+  Engine --> Entities[Mario DK Princess Barrels Ghosts]
+  Save[SaveModeHooks] --> StepsResults[Steps/Results files]
+  Load[LoadModeHooks] --> StepsResults
 ```
 
 ## Code Structure
