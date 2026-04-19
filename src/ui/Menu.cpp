@@ -1,24 +1,75 @@
 #include "Menu.h"
 
+#include <cstdlib>
+#include <cstring>
+
+namespace {
+
+void printCenteredRow(int row, const char* text) {
+	const int innerLeft = 1;
+	const int innerWidth = 78;
+	const int len = static_cast<int>(strlen(text));
+	int x = innerLeft + (innerWidth - len) / 2;
+	if (x < innerLeft) {
+		x = innerLeft;
+	}
+	gotoxy(x, row);
+	cout << text;
+}
+
+void drawOuterFrame() {
+	gotoxy(0, 0);
+	cout << '+';
+	for (int x = 1; x <= 78; ++x) {
+		gotoxy(x, 0);
+		cout << '-';
+	}
+	gotoxy(79, 0);
+	cout << '+';
+
+	gotoxy(0, 24);
+	cout << '+';
+	for (int x = 1; x <= 78; ++x) {
+		gotoxy(x, 24);
+		cout << '-';
+	}
+	gotoxy(79, 24);
+	cout << '+';
+
+	for (int y = 1; y <= 23; ++y) {
+		gotoxy(0, y);
+		cout << '|';
+		gotoxy(79, y);
+		cout << '|';
+	}
+}
+
+} // namespace
+
 void Menu::printMenu() {
-	for (int i = 0; i <= 79; i++) {
-		gotoxy(i, 0); // Top border
-		cout << '-';
-		gotoxy(i, 24);// Bottom border
-		cout << '-';
+	system("cls");
+	drawOuterFrame();
+
+	// ASCII title block (plain ASCII; each line centered in the inner area)
+	static const char* const kBanner[] = {
+		" ____   ___ _  _  _  ___  _  _  ____  _  _ ",
+		"|  _ \\ / _ \\| \\| |/ |/ _ \\| \\| |/ ___|| \\| |",
+		"| | | | | | | .' | ' | | | | .' | |  _ | .' |",
+		"| |_| | |_| | |\\ | .' | |_| | |\\ | |_| | |\\ |",
+		"|____/ \\___/|_| \\_|_|\\_|\\___/|_| \\|\\____|_| \\|",
+	};
+	const int bannerLines = static_cast<int>(sizeof(kBanner) / sizeof(kBanner[0]));
+	const int bannerStartRow = 2;
+	for (int i = 0; i < bannerLines; ++i) {
+		printCenteredRow(bannerStartRow + i, kBanner[i]);
 	}
-	for (int i = 1; i <= 23; i++) {
-		gotoxy(0, i); // Left border
-		cout << '-';
-		gotoxy(79, i); // Right border
-		cout << '-';
-	}
-	gotoxy(27, 8);
-	cout << "Welcome to Donkey Kong"; // Title
-	gotoxy(27, 10);
-	cout << "Press '1' to - Start Game";
-	gotoxy(27, 12);
-	cout << "Press '2' to - Exit";
+
+	printCenteredRow(8, "~~~  CONSOLE EDITION  ~~~");
+	printCenteredRow(9, "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+
+	printCenteredRow(11, "[1]  Start Game");
+	printCenteredRow(12, "[2]  Exit");
+	printCenteredRow(14, "------------------------------------------");
 }
 
 int Menu::getChoice() {
