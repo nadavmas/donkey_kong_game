@@ -98,5 +98,13 @@ Prompt #9 (Plan Mode):
 What Cursor did:
 - Added `README.md` documenting the project architecture/structure plus links to `MEMORY_BANK.md` and the `.cursor/rules/*` guidance.
 
+---
 
+Prompt #10 (Agent Mode):
+"i want you to make sure that the @README.md file has the screenshots of the console, and that it explains that i've built the project without cursor as a school project for my degree, and started upgrading it using cursor later on, thats also when i have started documenting the project on git."
+
+What Cursor did:
+- Updated `README.md` with a **Project origin** section (original school/degree work without Cursor; later upgrades with Cursor; Git documentation starting in that phase), a dedicated **Screenshots** section with explicit paths under `docs/screenshots/` and the existing console menu + gameplay images, and a cross-reference from the AI-assisted development section.
+
+---
 

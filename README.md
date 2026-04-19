@@ -1,25 +1,85 @@
-# Donkey Kong Game (C++ Console)
+# Donkey Kong — Console Edition
 
-Donkey Kong-style C++ console game with stage layouts loaded from `dkong*.screen` files.
+A **C++ terminal clone** of classic Donkey Kong: multi-level ASCII stages, enemies, power-ups, and a data-driven level format you can edit without recompiling.
 
-## Quick Start
+## Project origin
 
-1. Open the Visual Studio solution: `Donkey_Kong_AN.sln`.
+The game was **first built without Cursor** as a **school project for my degree**: the original C++ implementation, gameplay, and assignment requirements were completed in that academic context.
+
+After that, I **came back to the codebase and upgraded it with Cursor**—refactors (for example engine vs. game modes), tooling, build/repo layout, and quality-of-life fixes happened in this later phase.
+
+**Git-based documentation** (this README, `MEMORY_BANK.md`, `.cursor/rules`, and related project notes) **started when I began that upgrade path**, as I turned the repo into something clearer for collaborators and for my portfolio—not only a coursework submission.
+
+The project still reflects a clean split between **game engine**, **play modes**, and **file-based stages**.
+
+---
+
+## Screenshots
+
+Console captures (Windows terminal). Files live in [`docs/screenshots/`](docs/screenshots/).
+
+<!-- Markdown images so the README renders in GitHub, Cursor, and other Markdown previews -->
+
+![Main menu — DONKEY KONG Console Edition](./docs/screenshots/console_menu.png)
+
+*Main menu*
+
+![Gameplay — ASCII Donkey Kong level with HUD](./docs/screenshots/console_game.png)
+
+*Gameplay — HUD, platforms, ladders, and entities rendered in the console*
+
+---
+
+## Why this project (for recruiters)
+
+| Area | What it shows |
+|------|----------------|
+| **C++ & OOP** | Game objects (`Mario`, `DonkeyKong`, barrels, ghosts), shared engine loop, mode-specific behavior behind a small hook interface. |
+| **Architecture** | Separation of **core engine** (`GameEngine::runStage`) from **modes** (`GameSimple`, save/load/replay, silent runs) via strategy-style callbacks. |
+| **I/O & tooling** | Custom stage format (`.screen`), optional **record/replay** (`.steps` / `.result`), CLI flags for automation and testing. |
+| **Real-world constraints** | Stage discovery from the **process working directory**, `assets/` fallback, Visual Studio post-build copy — the kind of “it works on my machine” problems you solve in shipping code. |
+
+---
+
+## Tech stack
+
+- **Language:** C++ (Windows console)
+- **Build:** Visual Studio solution (`Donkey_Kong_AN.sln`)
+- **Data:** Text stages (`dkong*.screen`) + optional recorded runs
+
+---
+
+## Features
+
+- **ASCII gameplay** with HUD (lives, score), platforms, ladders, ramps, and hazards
+- **Difficulty** and **level selection** over discovered stage files
+- **Hammer** and **extra-life** mechanics driven by stage data (not hardcoded magic)
+- **Save / load / silent** modes for deterministic replays and batch-style runs
+
+---
+
+## Quick start
+
+1. Open **`Donkey_Kong_AN.sln`** in Visual Studio.
 2. Build and run the startup project.
-3. Note: stage discovery depends on the runtime working directory.
+3. Stages are discovered from the **runtime working directory** (see below); the debugger is set up so typical runs find `dkong*.screen` next to the built executable.
 
 ### Command-line modes
 
-The entry point (`src/core/Main.cpp`) selects a mode based on arguments:
+`src/core/Main.cpp` selects behavior from arguments:
 
-- Default: normal interactive run
-- `-save`: record moves/results into `.steps` / `.result` files
-- `-load`: replay a previously recorded run
-- `-load -silent`: same as `-load` but with silent output mode
+| Mode | Args | Purpose |
+|------|------|---------|
+| Interactive | *(default)* | Normal play |
+| Record | `-save` | Write moves/results to `.steps` / `.result` |
+| Replay | `-load` | Replay a recorded run |
+| Silent replay | `-load -silent` | Replay without console output |
+
+---
 
 ## Architecture
 
-The game is split into a small “game runner” layer and the core stage loop:
+The codebase separates a thin **runner/menu** layer from a shared **stage loop** inside the engine; each **mode** plugs in hooks for input, rendering, and recording.
 
 ```mermaid
 flowchart TD
@@ -33,77 +93,54 @@ flowchart TD
   Load[LoadModeHooks] --> StepsResults
 ```
 
-## Code Structure
+---
 
-- `src/core/Main.cpp`
-  - Parses CLI flags (`-save`, `-load`, `-silent`) and calls `game.run(mode)`.
-- `src/core/Game.cpp`
-  - Shows the main menu and dispatches to `GameSimple`, `GameSave`, `GameLoad`, or `GameSilent`.
-  - Discovers stage files by scanning `std::filesystem::current_path()` (with `assets/` fallback).
-- `src/core/GameEngine.cpp`
-  - Contains `GameEngine::runStage(...)`: the shared per-stage loop (Mario/Barrels/Ghosts, collisions, difficulty).
-  - Uses “mode hooks” (`GameModeHooks`) to decide how input/recording/rendering work.
-- `src/world/Board.cpp`
-  - Implements `Board::load(...)` to parse `.screen` and place entities/tiles.
-- `src/logic/Verifications.cpp`
-  - Collision and interaction helpers (ladder, hammer, falling checks, explosions, win condition).
-- `src/objects/*`
-  - `Mario`, `DonkeyKong`, `Princess`, `Barrel`, `Ghost` implementations.
+## Repository layout (high level)
 
-## Stages and File Formats
+| Area | Role |
+|------|------|
+| `src/core/` | Entry, menu, `GameEngine`, mode implementations |
+| `src/world/` | `Board::load` — parses `.screen` and places tiles/entities |
+| `src/logic/` | Collisions, ladder/hammer/fall/win checks |
+| `src/objects/` | Mario, DK, princess, barrels, ghosts |
+| `assets/` | Example `dkong*.screen` (and related files) |
+| `MEMORY_BANK.md` | **Source of truth** for controls, tile legend, and gameplay invariants |
 
-### Stage discovery (runtime)
+---
 
-Stages are loaded by scanning the runtime current working directory for `dkong*.screen` (plus related `.steps`/`.result` files).
+## Stages and file formats
 
-If nothing is found, the code falls back to looking for an `assets/` directory adjacent to the working directory.
-See `src/core/Game.cpp`:
+### Stage discovery
 
-- `getAllBoardFileNames(...)` (`dkong*.screen`)
-- `getAllStepsFileNames(...)` (`dkong*.steps`)
-- `getAllResultFileNames(...)` (`dkong*.result`)
+Stages are found by scanning the **current working directory** for `dkong*.screen`. If nothing matches, the code can fall back to an adjacent **`assets/`** folder. Related `.steps` / `.result` files follow the same discovery pattern. See `getAllBoardFileNames` / `getAllStepsFileNames` / `getAllResultFileNames` in `src/core/Game.cpp`.
 
-### `.screen` markers
+### `.screen` markers (summary)
 
-`Board::load(...)` reads the file character-by-character and places entities based on marker tiles:
+`Board::load(...)` maps marker characters to entities; notable markers include:
 
-- `@`: Mario start
-- `&`: Donkey Kong start
-- `$`: Princess position
-- `L`: legend top-left anchor (legend must fit within the board bounds)
-- `x` / `X`: ghost spawn positions (two ghost types)
-- `p`: hammer pickup position
-- Extra life: a visual `"<3"` representation (the loader checks for a `3` whose previous character is `<`)
+- `@` Mario · `&` Donkey Kong · `$` Princess · `L` legend anchor  
+- `x` / `X` ghost spawns · `p` hammer · extra life via `"<3"` pattern  
+- `H` ladder · `Q` solid · `=` platform · `<` / `>` ramp indicators  
 
-Additional tiles referenced by movement/collision logic include:
+Full rules live in **`MEMORY_BANK.md`** and `src/world/Board.cpp`.
 
-- `H`: ladder
-- `Q`: walls/solid blocks
-- `=`: platform/floor
-- `<` / `>`: barrel ramp indicators
+---
 
-See `src/world/Board.cpp` for the entity placement rules and legend anchor handling.
+## Controls
 
-## Controls (key actions)
+- **Move:** `w` `a` `s` `d` — after a direction, Mario **auto-continues** in that direction until you change it.  
+- **Ladders:** pressing `s` with **no ladder** under Mario does **not** move him downward (intentional).  
+- **Hammer:** `p` when the hammer has been picked up.
 
-Use the documented controls below:
+---
 
-- Move: `w`, `a`, `s`, `d`
-  - After choosing a direction, Mario continues automatically.
-  - Ladder behavior is special: pressing `s` when there is no ladder under Mario causes Mario to stay.
-- Hammer: `p`
-  - Hammer usage is enabled only when Mario has picked up the hammer.
+## Contributing / AI-assisted development
 
-Gameplay invariants (hammer pickup rules, extra-life rules, and `.screen` parsing expectations) are defined in `MEMORY_BANK.md`.
+The **Cursor-assisted** work is layered on top of the original degree coursework (see [Project origin](#project-origin)). This repo includes Cursor rules that keep gameplay and parsing changes consistent:
 
-## Cursor Rules and `MEMORY_BANK.md`
+- **`MEMORY_BANK.md`** — invariants (controls, hammer, extra life, `.screen` expectations)  
+- **`.cursor/rules/project-context.mdc`** — what to read before gameplay edits  
+- **`.cursor/rules/changes-safety.mdc`** — small, reviewable diffs  
+- **`.cursor/rules/prompt-tracker.mdc`** — prompt logging for file-changing sessions  
 
-This repo includes Cursor guidance files that act as “source of truth” for changes:
-
-- `MEMORY_BANK.md`: project-specific invariants
-- `.cursor/rules/project-context.mdc`: what to treat as truth before gameplay-affecting edits
-- `.cursor/rules/changes-safety.mdc`: how to keep edits safe and reviewable
-- `.cursor/rules/prompt-tracker.mdc`: how to log user prompts that result in file changes
-
-If you change `.screen` parsing or any gameplay rules, update `MEMORY_BANK.md` in the same change so controls/tile legend/invariants remain consistent.
-
+If you change `.screen` parsing or gameplay rules, update **`MEMORY_BANK.md`** in the same change.
